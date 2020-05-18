@@ -1,0 +1,35 @@
+version: "3"
+services:
+    web:                            
+        build: 
+            context: ./
+            dockerfile: Dockerfile
+        container_name: my_first_container
+        image: my_first_image
+        depends_on:
+            - db
+        volumes:
+            - ./src:/var/www/html/
+        ports:
+            - "80:80"
+
+    db:
+        container_name: my_first_db
+        image: mariadb
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: example
+            MYSQL_DATABASE: my_db
+            MYSQL_USER: bill    
+            MYSQL_PASSWORD: bill123456
+        ports:
+            - "3308:3306"
+    zoo1: 
+        image: zookeeper
+        restart: always
+        hostname: zoo1
+        ports:
+            - 2181:2181
+        environment:
+            ZOO_MY_ID: 1
+            ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
